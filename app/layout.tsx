@@ -12,7 +12,7 @@ const pressStart = Press_Start_2P({
 export const metadata: Metadata = {
   title: "Succes Pokemon Heartgold & Soulsilver",
   description:
-    "Valide chaque succes inspire de Pokemon Heartgold & Soulsilver avec une interface pixel art facon chaine Mii.",
+    "Succes Pokemon Heartgold & Soulsilver - Challenge run des succès créés par Josplay, pour Pokémon Heartgold & Soulsilver. Chaque succès peut être validé en respectant les conditions indiquées.",
   metadataBase: new URL("https://mii-achievements.local"),
   icons: {
     icon: "/icon.jpg",
