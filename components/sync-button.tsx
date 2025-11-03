@@ -18,6 +18,8 @@ export const SyncButton: React.FC<SyncButtonProps> = ({ completedIds }) => {
     type: "success" | "error";
     text: string;
   } | null>(null);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   // Charger les credentials depuis localStorage au montage
   useEffect(() => {
@@ -69,7 +71,15 @@ export const SyncButton: React.FC<SyncButtonProps> = ({ completedIds }) => {
         type: "success",
         text: `Synchronisé ! ${data.synced} succès (${data.added} ajoutés, ${data.removed} supprimés)`,
       });
-      setTimeout(() => setIsOpen(false), 2000);
+
+      // Afficher le toast de succès
+      setToastMessage(`✓ Synchronisé ! ${data.synced} succès`);
+      setShowToast(true);
+
+      setTimeout(() => {
+        setIsOpen(false);
+        setTimeout(() => setShowToast(false), 3000);
+      }, 2000);
     } catch (error) {
       // En cas d'erreur d'auth, supprimer les credentials stockés
       localStorage.removeItem(AUTH_STORAGE_KEY);
@@ -236,6 +246,27 @@ export const SyncButton: React.FC<SyncButtonProps> = ({ completedIds }) => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Toast de confirmation */}
+      {showToast && (
+        <div className="fixed bottom-8 right-8 z-50 animate-in slide-in-from-bottom-5 fade-in duration-300">
+          <div className="flex items-center gap-3 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-500 px-6 py-4 text-white shadow-2xl">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="size-6"
+            >
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            <span className="font-bold text-base">{toastMessage}</span>
           </div>
         </div>
       )}
