@@ -80,5 +80,21 @@
   { "id": "premier-vol", "title": "Premier vol", "description": "Vol pour la première fois", "icon": "/icons/default.svg" },
   { "id": "trio-legendnaire", "title": "Trio légendaire", "description": "Libérer les chiens légendaires", "icon": "/icons/default.svg" },
   { "id": "alphabet-vivant", "title": "Alphabet vivant", "description": "Capturer les 28 Zarbi", "icon": "/icons/default.svg" },
-  { "id": "arsenal-complet", "title": "Arsenal complet", "description": "Obtenir toutes les CT et CS", "icon": "/icons/default.svg" }
+  { "id": "arsenal-complet", "title": "Arsenal complet", "description": "Obtenir toutes les CT et CS", "icon": "/icons/default.svg" },
+  { "id": "falkner", "title": "Champion : Albert", "description": "Vaincre Albert, champion de Mauville, spécialiste des Pokémon Vol.", "icon": "/icons/default.svg" },
+  { "id": "bugsy", "title": "Champion : Hector", "description": "Vaincre Hector, champion d'Écorcia, spécialiste des Pokémon Insecte.", "icon": "/icons/default.svg" },
+  { "id": "whitney", "title": "Championne : Blanche", "description": "Vaincre Blanche, championne de Doublonville, spécialiste des Pokémon Normal.", "icon": "/icons/default.svg" },
+  { "id": "morty", "title": "Champion : Mortimer", "description": "Vaincre Mortimer, champion de Rosalia, spécialiste des Pokémon Spectre.", "icon": "/icons/default.svg" },
+  { "id": "chuck", "title": "Champion : Chuck", "description": "Vaincre Chuck, champion d’Irisia, spécialiste des Pokémon Combat.", "icon": "/icons/default.svg" },
+  { "id": "jasmine", "title": "Championne : Jasmine", "description": "Vaincre Jasmine, championne d’Oliville, spécialiste des Pokémon Acier.", "icon": "/icons/default.svg" },
+  { "id": "pryce", "title": "Champion : Frédo", "description": "Vaincre Frédo, champion d’Acajou, spécialiste des Pokémon Glace.", "icon": "/icons/default.svg" },
+  { "id": "clair", "title": "Championne : Sandra", "description": "Vaincre Sandra, championne d’Ébènelle, spécialiste des Pokémon Dragon.", "icon": "/icons/default.svg" },
+  { "id": "brock", "title": "Champion : Pierre", "description": "Vaincre Pierre, champion d’Argenta, spécialiste des Pokémon Roche.", "icon": "/icons/default.svg" },
+  { "id": "misty", "title": "Championne : Ondine", "description": "Vaincre Ondine, championne d’Azuria, spécialiste des Pokémon Eau.", "icon": "/icons/default.svg" },
+  { "id": "lt-surge", "title": "Champion : Major Bob", "description": "Vaincre Major Bob, champion de Carmin-sur-Mer, spécialiste des Pokémon Électrik.", "icon": "/icons/default.svg" },
+  { "id": "erika", "title": "Championne : Erika", "description": "Vaincre Erika, championne de Céladopole, spécialiste des Pokémon Plante.", "icon": "/icons/default.svg" },
+  { "id": "janine", "title": "Championne : Jeannine", "description": "Vaincre Jeannine, championne de Parmanie, spécialiste des Pokémon Poison.", "icon": "/icons/default.svg" },
+  { "id": "sabrina", "title": "Championne : Morgane", "description": "Vaincre Morgane, championne de Safrania, spécialiste des Pokémon Psy.", "icon": "/icons/default.svg" },
+  { "id": "blaine", "title": "Champion : Auguste", "description": "Vaincre Auguste, champion des Îles Écume, spécialiste des Pokémon Feu.", "icon": "/icons/default.svg" },
+  { "id": "blue", "title": "Champion : Blue", "description": "Vaincre Blue, champion de Jadielle, maître des Pokémon de tous types.", "icon": "/icons/default.svg" }
 ]
