@@ -14,6 +14,11 @@ export const metadata: Metadata = {
   description:
     "Valide chaque succes inspire de Pokemon Heartgold & Soulsilver avec une interface pixel art facon chaine Mii.",
   metadataBase: new URL("https://mii-achievements.local"),
+  icons: {
+    icon: "/icon.jpg",
+    shortcut: "/icon.jpg",
+    apple: "/icon.jpg",
+  },
 };
 
 export default function RootLayout({
