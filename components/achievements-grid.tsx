@@ -396,9 +396,7 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
               // Divider between categories when showing all categories
               const showCategoryDivider =
                 filterCategory === "all" &&
-                index > 0 &&
-                prevAchievement &&
-                achievement.category !== prevAchievement.category;
+                (index === 0 || (prevAchievement && achievement.category !== prevAchievement.category));
 
               const categoryColors: Record<AchievementCategory, string> = {
                 "Intrigue": "from-red-500 to-pink-500",
@@ -406,6 +404,13 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
                 "Quêtes": "from-green-500 to-emerald-500",
                 "Collection": "from-purple-500 to-violet-500",
                 "Divers": "from-gray-500 to-slate-500",
+              };
+
+              // Calculer le compteur pour cette catégorie
+              const getCategoryCount = (category: AchievementCategory) => {
+                const categoryAchievements = achievements.filter(a => a.category === category);
+                const completedInCategory = categoryAchievements.filter(a => completedSet.has(a.id)).length;
+                return { completed: completedInCategory, total: categoryAchievements.length };
               };
 
               return (
@@ -432,26 +437,30 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
                       <div className="h-px flex-1 bg-gradient-to-r from-mii-slate/20 to-transparent" />
                     </div>
                   )}
-                  {showCategoryDivider && (
-                    <div className="col-span-full flex items-center gap-3">
-                      <div className={`inline-flex items-center gap-2 rounded-full bg-gradient-to-r ${categoryColors[achievement.category]} px-4 py-2 text-sm font-bold text-white shadow-lg`}>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="size-4"
-                        >
-                          <path d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                        {achievement.category}
+                  {showCategoryDivider && (() => {
+                    const categoryCount = getCategoryCount(achievement.category);
+                    return (
+                      <div className="col-span-full flex items-center gap-3">
+                        <div className={`inline-flex items-center gap-2 rounded-full bg-gradient-to-r ${categoryColors[achievement.category]} px-4 py-2 text-sm font-bold text-white shadow-lg`}>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="size-4"
+                          >
+                            <path d="M4 6h16M4 12h16M4 18h16" />
+                          </svg>
+                          <span>{achievement.category}</span>
+                          <span className="ml-1 opacity-90">({categoryCount.completed}/{categoryCount.total})</span>
+                        </div>
+                        <div className={`h-px flex-1 bg-gradient-to-r ${categoryColors[achievement.category]}/20 to-transparent`} />
                       </div>
-                      <div className={`h-px flex-1 bg-gradient-to-r ${categoryColors[achievement.category]}/20 to-transparent`} />
-                    </div>
-                  )}
+                    );
+                  })()}
                   <AchievementCard
                     achievement={achievement}
                     isCompleted={isCompleted}
