@@ -68,10 +68,15 @@ export async function POST(request: NextRequest) {
       .filter((p: { achievementId: string; id: string }) => !newAchievementIds.has(p.achievementId))
       .map((p: { achievementId: string; id: string }) => p.id);
 
+    console.log("Current IDs:", Array.from(currentAchievementIds));
+    console.log("New IDs:", Array.from(newAchievementIds));
+    console.log("To delete:", toDelete);
+
     if (toDelete.length > 0) {
-      await prisma.userProgress.deleteMany({
+      const deleted = await prisma.userProgress.deleteMany({
         where: { id: { in: toDelete } },
       });
+      console.log("Deleted count:", deleted.count);
     }
 
     // Add new completed achievements

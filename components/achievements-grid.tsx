@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AchievementCard } from "@/components/achievement-card";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import type { Achievement } from "@/types/achievement";
@@ -19,6 +19,7 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
   readOnly = false,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [readOnlyCompletedIds, setReadOnlyCompletedIds] = useState<string[]>(initialCompletedIds);
   const {
     value: localCompletedIds,
     setValue: setCompletedIds,
@@ -26,7 +27,14 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
     isHydrated,
   } = useLocalStorage<string[]>(STORAGE_KEY, []);
 
-  const completedIds = readOnly ? initialCompletedIds : localCompletedIds;
+  // Sync readOnly completed IDs when they change
+  useEffect(() => {
+    if (readOnly) {
+      setReadOnlyCompletedIds(initialCompletedIds);
+    }
+  }, [readOnly, JSON.stringify(initialCompletedIds)]);
+
+  const completedIds = readOnly ? readOnlyCompletedIds : localCompletedIds;
 
   const completedSet = useMemo(() => new Set(completedIds), [completedIds]);
   const completedCount = completedSet.size;
