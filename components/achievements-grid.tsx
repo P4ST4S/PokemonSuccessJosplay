@@ -170,7 +170,7 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
               Aucun succes trouve
             </p>
             <p className="text-sm text-mii-slate">
-              Essaye avec d'autres mots-cles
+              Essaye avec d&apos;autres mots-cles
             </p>
           </div>
         </div>

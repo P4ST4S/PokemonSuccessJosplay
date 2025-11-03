@@ -178,7 +178,7 @@ export const SyncButton: React.FC<SyncButtonProps> = ({ completedIds }) => {
                   htmlFor="username"
                   className="mb-1 block text-sm font-semibold text-mii-ink"
                 >
-                  Nom d'utilisateur
+                  Nom d&apos;utilisateur
                 </label>
                 <input
                   id="username"

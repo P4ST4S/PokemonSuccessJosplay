@@ -24,8 +24,6 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({
 
   useEffect(() => {
     if (isCompleted && isHydrated && buttonRef.current) {
-      setShowAnimation(true);
-
       // Get button position for confetti origin
       const rect = buttonRef.current.getBoundingClientRect();
       const x = (rect.left + rect.width - 40) / window.innerWidth; // Position du check
@@ -73,10 +71,17 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({
         startVelocity: 45,
       });
 
+      // Defer state update to avoid warning
+      const animFrame = requestAnimationFrame(() => {
+        setShowAnimation(true);
+      });
       const timer = setTimeout(() => {
         setShowAnimation(false);
       }, 1000);
-      return () => clearTimeout(timer);
+      return () => {
+        cancelAnimationFrame(animFrame);
+        clearTimeout(timer);
+      };
     }
   }, [isCompleted, isHydrated]);
 
