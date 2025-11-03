@@ -87,8 +87,29 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
     }
 
     // Trier les succès
-    if (readOnly) {
-      // En mode lecture seule, trier d'abord par statut (validés en premier)
+    const categoryOrder: AchievementCategory[] = [
+      "Intrigue",
+      "Pokémon",
+      "Quêtes",
+      "Collection",
+      "Divers",
+    ];
+
+    if (readOnly && filterCategory === "all") {
+      // En mode lecture seule avec toutes catégories : trier par statut puis par catégorie
+      filtered = [...filtered].sort((a, b) => {
+        const aCompleted = completedSet.has(a.id);
+        const bCompleted = completedSet.has(b.id);
+
+        // D'abord trier par statut
+        if (aCompleted && !bCompleted) return -1;
+        if (!aCompleted && bCompleted) return 1;
+
+        // Ensuite par catégorie
+        return categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category);
+      });
+    } else if (readOnly) {
+      // En mode lecture seule avec une catégorie spécifique : trier uniquement par statut
       filtered = [...filtered].sort((a, b) => {
         const aCompleted = completedSet.has(a.id);
         const bCompleted = completedSet.has(b.id);
@@ -97,15 +118,7 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
         return 0;
       });
     } else if (filterCategory === "all") {
-      // Si on affiche toutes les catégories, grouper par catégorie
-      const categoryOrder: AchievementCategory[] = [
-        "Intrigue",
-        "Pokémon",
-        "Quêtes",
-        "Collection",
-        "Divers",
-      ];
-
+      // Si on affiche toutes les catégories en mode normal, grouper par catégorie
       filtered = [...filtered].sort((a, b) => {
         const categoryComparison = categoryOrder.indexOf(a.category) - categoryOrder.indexOf(b.category);
         return categoryComparison;
