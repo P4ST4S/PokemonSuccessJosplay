@@ -68,6 +68,23 @@ export const SyncButton: React.FC = () => {
       );
       setIsAuthenticated(true);
 
+      // Récupérer la progression depuis le serveur après la sync
+      const progressResponse = await fetch(`/api/progress/${username}`, {
+        cache: "no-store",
+      });
+
+      if (progressResponse.ok) {
+        const progressData = await progressResponse.json();
+        // Mettre à jour le localStorage avec les données du serveur
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify(progressData.completedIds)
+        );
+
+        // Déclencher un événement pour que les autres composants se mettent à jour
+        window.dispatchEvent(new Event("storage"));
+      }
+
       setMessage({
         type: "success",
         text: `Synchronisé ! ${data.synced} succès (${data.added} ajoutés, ${data.removed} supprimés)`,

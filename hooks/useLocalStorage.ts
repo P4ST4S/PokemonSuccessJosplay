@@ -36,6 +36,38 @@ export function useLocalStorage<T>(
     }
   }, [key]);
 
+  // Écouter les changements de localStorage
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent | Event) => {
+      // StorageEvent pour les changements entre onglets
+      // Event personnalisé pour les changements dans le même onglet
+      if (e instanceof StorageEvent) {
+        if (e.key === key && e.newValue !== null) {
+          try {
+            setValue(JSON.parse(e.newValue) as T);
+          } catch (error) {
+            console.warn(`Unable to parse localStorage value for key "${key}"`, error);
+          }
+        }
+      } else {
+        // Événement personnalisé - relire depuis localStorage
+        try {
+          const stored = window.localStorage.getItem(key);
+          if (stored !== null) {
+            setValue(JSON.parse(stored) as T);
+          }
+        } catch (error) {
+          console.warn(`Unable to access localStorage for key "${key}"`, error);
+        }
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, [key]);
+
   const setStoredValue = useCallback(
     (next: Updater<T>) => {
       setValue((previous) => {
