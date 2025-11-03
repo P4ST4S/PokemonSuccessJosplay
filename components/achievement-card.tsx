@@ -8,6 +8,7 @@ interface AchievementCardProps {
   isCompleted: boolean;
   isHydrated: boolean;
   onToggle: (id: Achievement["id"]) => void;
+  readOnly?: boolean;
 }
 
 export const AchievementCard: React.FC<AchievementCardProps> = ({
@@ -15,6 +16,7 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({
   isCompleted,
   isHydrated,
   onToggle,
+  readOnly = false,
 }) => {
   const { id, title, description, icon } = achievement;
   const [showAnimation, setShowAnimation] = useState(false);
@@ -79,7 +81,9 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({
   }, [isCompleted, isHydrated]);
 
   const handleClick = () => {
-    onToggle(id);
+    if (!readOnly) {
+      onToggle(id);
+    }
   };
 
   const statusLabel = isCompleted ? "VALIDE" : "NON VALIDE";
@@ -89,12 +93,19 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({
       ref={buttonRef}
       type="button"
       onClick={handleClick}
-      className={`group relative flex h-full min-h-40 items-stretch gap-4 overflow-hidden rounded-[26px] border-[3px] border-mii-silver bg-white/95 px-6 py-6 text-left shadow-[7px_7px_0_rgba(18,38,58,0.12)] transition-transform duration-150 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mii-lime/70 active:translate-y-0.5 ${
+      disabled={readOnly}
+      className={`group relative flex h-full min-h-40 items-stretch gap-4 overflow-hidden rounded-[26px] border-[3px] border-mii-silver bg-white/95 px-6 py-6 text-left shadow-[7px_7px_0_rgba(18,38,58,0.12)] transition-transform duration-150 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mii-lime/70 ${
+        readOnly
+          ? "cursor-default"
+          : "active:translate-y-0.5"
+      } ${
         isCompleted && isHydrated && showAnimation
           ? "border-mii-lime/70 bg-mii-lime/20 animate-achievement-pop"
           : isCompleted
           ? "border-mii-lime/70 bg-mii-lime/20"
-          : "hover:-translate-y-1"
+          : !readOnly
+          ? "hover:-translate-y-1"
+          : ""
       }`}
       aria-pressed={isCompleted}
       aria-label={`${title} — ${statusLabel}`}

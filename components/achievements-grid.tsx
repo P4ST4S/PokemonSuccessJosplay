@@ -9,18 +9,24 @@ const STORAGE_KEY = "mii-achievements::completed";
 
 interface AchievementsGridProps {
   achievements: Achievement[];
+  initialCompletedIds?: string[];
+  readOnly?: boolean;
 }
 
 export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
   achievements,
+  initialCompletedIds = [],
+  readOnly = false,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const {
-    value: completedIds,
+    value: localCompletedIds,
     setValue: setCompletedIds,
     reset,
     isHydrated,
   } = useLocalStorage<string[]>(STORAGE_KEY, []);
+
+  const completedIds = readOnly ? initialCompletedIds : localCompletedIds;
 
   const completedSet = useMemo(() => new Set(completedIds), [completedIds]);
   const completedCount = completedSet.size;
@@ -83,14 +89,16 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
             <span className="size-2 rounded-full bg-mii-sky-400" aria-hidden />
             {completionRatio}% valides
           </span>
-          <button
-            type="button"
-            onClick={handleReset}
-            disabled={!isHydrated || completedCount === 0}
-            className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-mii-slate transition-all duration-200 hover:bg-mii-silver/60 hover:text-mii-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mii-sky-300 disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            Reinitialiser
-          </button>
+          {!readOnly && (
+            <button
+              type="button"
+              onClick={handleReset}
+              disabled={!isHydrated || completedCount === 0}
+              className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-mii-slate transition-all duration-200 hover:bg-mii-silver/60 hover:text-mii-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mii-sky-300 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Reinitialiser
+            </button>
+          )}
         </div>
       </header>
 
@@ -174,7 +182,8 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
               achievement={achievement}
               isCompleted={completedSet.has(achievement.id)}
               onToggle={handleToggle}
-              isHydrated={isHydrated}
+              isHydrated={readOnly ? true : isHydrated}
+              readOnly={readOnly}
             />
           ))}
         </div>
