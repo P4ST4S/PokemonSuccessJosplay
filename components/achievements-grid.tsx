@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { AchievementCard } from "@/components/achievement-card";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import type { Achievement } from "@/types/achievement";
@@ -14,6 +14,7 @@ interface AchievementsGridProps {
 export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
   achievements,
 }) => {
+  const [searchQuery, setSearchQuery] = useState("");
   const {
     value: completedIds,
     setValue: setCompletedIds,
@@ -24,6 +25,18 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
   const completedSet = useMemo(() => new Set(completedIds), [completedIds]);
   const completedCount = completedSet.size;
   const totalCount = achievements.length;
+
+  const filteredAchievements = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return achievements;
+    }
+    const query = searchQuery.toLowerCase();
+    return achievements.filter(
+      (achievement) =>
+        achievement.title.toLowerCase().includes(query) ||
+        achievement.description.toLowerCase().includes(query)
+    );
+  }, [achievements, searchQuery]);
 
   const completionRatio = useMemo(() => {
     if (totalCount === 0) {
@@ -80,17 +93,92 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
           </button>
         </div>
       </header>
-      <div className="grid gap-6 md:grid-cols-2">
-        {achievements.map((achievement) => (
-          <AchievementCard
-            key={achievement.id}
-            achievement={achievement}
-            isCompleted={completedSet.has(achievement.id)}
-            onToggle={handleToggle}
-            isHydrated={isHydrated}
-          />
-        ))}
+
+      <div className="relative">
+        <div className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="size-5 text-mii-slate/60"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+        </div>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Rechercher un succes..."
+          className="w-full rounded-2xl border-2 border-mii-silver bg-white px-12 py-3 text-base text-mii-ink placeholder-mii-slate/50 transition-all duration-200 focus:border-mii-sky-400 focus:outline-none focus:ring-4 focus:ring-mii-sky-400/20"
+        />
+        {searchQuery && (
+          <button
+            type="button"
+            onClick={() => setSearchQuery("")}
+            className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full p-1 text-mii-slate/60 transition-colors hover:bg-mii-silver/50 hover:text-mii-ink"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="size-5"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        )}
       </div>
+
+      {filteredAchievements.length === 0 ? (
+        <div className="flex flex-col items-center justify-center gap-4 rounded-3xl border-2 border-dashed border-mii-silver bg-white/50 px-6 py-12 text-center">
+          <div className="rounded-full bg-mii-sky-100 p-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="size-8 text-mii-sky-600"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+          </div>
+          <div className="flex flex-col gap-2">
+            <p className="text-lg font-semibold text-mii-ink">
+              Aucun succes trouve
+            </p>
+            <p className="text-sm text-mii-slate">
+              Essaye avec d'autres mots-cles
+            </p>
+          </div>
+        </div>
+      ) : (
+        <div className="grid gap-6 md:grid-cols-2">
+          {filteredAchievements.map((achievement) => (
+            <AchievementCard
+              key={achievement.id}
+              achievement={achievement}
+              isCompleted={completedSet.has(achievement.id)}
+              onToggle={handleToggle}
+              isHydrated={isHydrated}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 };
