@@ -80,7 +80,7 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
           </button>
         </div>
       </header>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2">
         {achievements.map((achievement) => (
           <AchievementCard
             key={achievement.id}

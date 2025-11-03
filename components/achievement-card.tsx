@@ -20,24 +20,26 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({
     onToggle(id);
   };
 
-  const statusLabel = isCompleted ? "Valide" : "Non valide";
+  const statusLabel = isCompleted ? "VALIDE" : "NON VALIDE";
 
   return (
     <button
       type="button"
       onClick={handleClick}
-      className={`group relative flex h-full flex-col gap-5 overflow-hidden rounded-[22px] border-[3px] border-mii-silver bg-white/95 px-6 py-5 text-left shadow-[6px_6px_0_rgba(18,38,58,0.12)] transition-transform duration-150 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mii-lime/70 active:translate-y-[2px] ${
+      className={`group relative flex h-full min-h-[160px] items-stretch gap-6 overflow-hidden rounded-[26px] border-[3px] border-mii-silver bg-white/95 px-6 py-6 text-left shadow-[7px_7px_0_rgba(18,38,58,0.12)] transition-transform duration-150 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mii-lime/70 active:translate-y-[2px] ${
         isCompleted && isHydrated
           ? "border-mii-lime/70 bg-mii-lime/20 animate-achievement-pop"
-          : "hover:-translate-y-[3px]"
+          : "hover:-translate-y-[4px]"
       }`}
       aria-pressed={isCompleted}
       aria-label={`${title} — ${statusLabel}`}
     >
-      <span className="absolute right-4 top-4 inline-flex items-center justify-center rounded-full border-[3px] border-white/60 bg-white p-1.5 shadow-[3px_3px_0_rgba(18,38,58,0.12)] transition-all duration-200 group-hover:bg-white">
+      <span className="absolute right-5 top-5 inline-flex items-center justify-center rounded-full border-[3px] border-mii-silver/50 bg-white p-2 shadow-[3px_3px_0_rgba(18,38,58,0.15)] transition-all duration-200 group-hover:bg-white">
         <span
           className={`grid size-7 place-items-center rounded-full font-semibold transition-all ${
-            isCompleted ? "bg-mii-lime text-white" : "bg-mii-silver text-mii-slate"
+            isCompleted
+              ? "bg-white text-mii-lime ring-2 ring-mii-lime/60"
+              : "bg-white text-mii-slate ring-2 ring-mii-silver/70"
           }`}
         >
           ✓
@@ -48,29 +50,33 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({
           </span>
         ) : null}
       </span>
-      <div className="flex items-center gap-4">
-        <span className="relative flex size-16 shrink-0 items-center justify-center rounded-[18px] border-[3px] border-mii-silver bg-mii-sky-100">
+      <div className="flex w-[120px] shrink-0 items-center justify-center self-stretch">
+        <span className="relative flex h-full w-full items-center justify-center rounded-[20px] border-[3px] border-mii-silver bg-mii-sky-100">
           <Image
             src={icon}
             alt=""
-            width={42}
-            height={42}
-            className="transition-transform duration-300 group-hover:scale-105"
+            width={96}
+            height={96}
+            className="h-full w-full max-w-[88px] object-contain p-3 transition-transform duration-300 group-hover:scale-105"
             aria-hidden
           />
         </span>
-        <div className="flex flex-1 flex-col">
+      </div>
+      <div className="flex flex-1 flex-col gap-4">
+        <div className="flex flex-col gap-2">
           <h2 className="text-lg font-semibold text-mii-ink">{title}</h2>
           <p className="text-sm text-mii-slate">{description}</p>
         </div>
+        <span
+          className={`mt-auto inline-flex items-center justify-center rounded-[14px] border-[2px] px-3 py-2 text-xs font-semibold uppercase tracking-[0.28em] ${
+            isCompleted
+              ? "border-mii-lime/80 bg-mii-lime/20 text-mii-ink"
+              : "border-mii-silver bg-white text-mii-slate"
+          }`}
+        >
+          {statusLabel}
+        </span>
       </div>
-      <span
-        className={`mt-auto inline-flex items-center justify-center rounded-[14px] border-[2px] px-3 py-2 text-xs font-semibold uppercase tracking-[0.28em] ${
-          isCompleted ? "border-mii-lime/80 bg-mii-lime/20 text-mii-ink" : "border-mii-silver bg-white text-mii-slate"
-        }`}
-      >
-        {statusLabel}
-      </span>
     </button>
   );
 };
