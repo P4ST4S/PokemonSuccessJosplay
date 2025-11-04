@@ -38,7 +38,7 @@
   { "id": "c-etait-un-vendredi", "title": "C’était un Vendredi", "description": "Capturer Lokhlass", "icon": "/icons/default.svg", "category": "Pokémon" },
   { "id": "le-combat-et-leau", "title": "Le combat et l’eau", "description": "Parler à Mélina et Lovis", "icon": "/icons/default.svg", "category": "Quêtes" },
   { "id": "il-vaut-son-prix", "title": "Il vaut son prix ?", "description": "Acheter le Magicarpe à 500 euros", "icon": "/icons/default.svg", "category": "Collection" },
-  { "id": "cest-dans-la-boite", "title": "C’est dans la boîte", "description": "Raffronter un dresseur avec Magneto VS.", "icon": "/icons/default.svg", "category": "Intrigue" },
+  { "id": "cest-dans-la-boite", "title": "C’est dans la boîte", "description": "Raffronter un dresseur avec Magneto VS.", "icon": "/icons/default.svg", "category": "Pokémon" },
   { "id": "merci-moumoune", "title": "Merci moumoune", "description": "Obtenir un cadeau de Maman", "icon": "/icons/default.svg", "category": "Quêtes" },
   { "id": "les-deux-pour-moi", "title": "Les deux pour moi", "description": "Parler aux mères de Red et Blue", "icon": "/icons/default.svg", "category": "Quêtes" },
   { "id": "lultime-ball", "title": "L’ultime ball", "description": "Obtenir la Masterball", "icon": "/icons/default.svg", "category": "Collection" },
@@ -96,5 +96,7 @@
   { "id": "janine", "title": "Championne : Jeannine", "description": "Vaincre Jeannine, championne de Parmanie, spécialiste des Pokémon Poison.", "icon": "/icons/default.svg", "category": "Intrigue" },
   { "id": "sabrina", "title": "Championne : Morgane", "description": "Vaincre Morgane, championne de Safrania, spécialiste des Pokémon Psy.", "icon": "/icons/default.svg", "category": "Intrigue" },
   { "id": "blaine", "title": "Champion : Auguste", "description": "Vaincre Auguste, champion des Îles Écume, spécialiste des Pokémon Feu.", "icon": "/icons/default.svg", "category": "Intrigue" },
-  { "id": "blue", "title": "Champion : Blue", "description": "Vaincre Blue, champion de Jadielle, maître des Pokémon de tous types.", "icon": "/icons/default.svg", "category": "Intrigue" }
+  { "id": "blue", "title": "Champion : Blue", "description": "Vaincre Blue, champion de Jadielle, maître des Pokémon de tous types.", "icon": "/icons/default.svg", "category": "Intrigue" },
+  { "id": "danse-de-la-victoire", "title": "Danse de la victoire", "description": "Vaincre les Kimono Girls", "icon": "/icons/default.svg", "category": "Intrigue" },
+  { "id": "poste-piafabec", "title": "Poste Piafabec", "description": "Livrer la lettre du Piafabec", "icon": "/icons/default.svg", "category": "Intrigue" }
 ]
