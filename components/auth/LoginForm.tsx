@@ -37,7 +37,7 @@ export function LoginForm({ onSubmit, onSwitchToRegister, error }: LoginFormProp
           type="text"
           value={identifier}
           onChange={(e) => setIdentifier(e.target.value)}
-          placeholder="josplay ou email@example.com"
+          placeholder="username ou email@example.com"
           required
           className="rounded-2xl border-2 border-mii-silver bg-white px-4 py-3 text-base text-mii-ink placeholder-mii-slate/50 transition-all duration-200 focus:border-mii-sky-400 focus:outline-none focus:ring-4 focus:ring-mii-sky-400/20"
         />

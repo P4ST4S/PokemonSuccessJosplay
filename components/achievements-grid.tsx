@@ -7,7 +7,7 @@ import { AchievementFilters } from "@/components/achievements/AchievementFilters
 import { CategoryDivider } from "@/components/achievements/CategoryDivider";
 import { StatusDivider } from "@/components/achievements/StatusDivider";
 import { EmptyState } from "@/components/achievements/EmptyState";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { useUser } from "@/hooks/useUser";
 import { useAchievementStats } from "@/hooks/useAchievementStats";
 import { useAchievementFilters } from "@/hooks/useAchievementFilters";
 import type { Achievement } from "@/types/achievement";
@@ -26,13 +26,8 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
 }) => {
   const [readOnlyCompletedIds, setReadOnlyCompletedIds] =
     useState<string[]>(initialCompletedIds);
-
-  const {
-    value: localCompletedIds,
-    setValue: setCompletedIds,
-    reset,
-    isHydrated,
-  } = useLocalStorage<string[]>(STORAGE_KEY, []);
+  const { user, isLoading: isUserLoading, refreshUser } = useUser();
+  const [isToggling, setIsToggling] = useState<string | null>(null);
 
   // Sync readOnly completed IDs
   useEffect(() => {
@@ -41,8 +36,9 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
     }
   }, [readOnly, JSON.stringify(initialCompletedIds)]);
 
-  const completedIds = readOnly ? readOnlyCompletedIds : localCompletedIds;
+  const completedIds = readOnly ? readOnlyCompletedIds : (user?.completedIds || []);
   const completedSet = new Set(completedIds);
+  const isHydrated = !isUserLoading;
 
   const stats = useAchievementStats({
     completedSet,
@@ -56,16 +52,38 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
   });
 
   const handleToggle = useCallback(
-    (id: Achievement["id"]) => {
-      setCompletedIds((previous) => {
-        if (previous.includes(id)) {
-          return previous.filter((entry) => entry !== id);
+    async (id: Achievement["id"]) => {
+      if (!user || isToggling) return;
+
+      setIsToggling(id);
+      try {
+        const response = await fetch("/api/achievements/toggle", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ achievementId: id }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to toggle achievement");
         }
-        return [...previous, id];
-      });
+
+        // Refresh user to get updated completedIds
+        await refreshUser();
+      } catch (error) {
+        console.error("Error toggling achievement:", error);
+      } finally {
+        setIsToggling(null);
+      }
     },
-    [setCompletedIds]
+    [user, isToggling, refreshUser]
   );
+
+  const handleReset = useCallback(async () => {
+    if (!user || readOnly) return;
+
+    // Not implemented yet - would need a bulk delete API endpoint
+    console.log("Reset not yet implemented for DB mode");
+  }, [user, readOnly]);
 
   const getCategoryStats = (category: Achievement["category"]) => {
     const categoryAchievements = achievements.filter(
@@ -139,7 +157,7 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
         completedCount={stats.completedCount}
         totalCount={stats.totalCount}
         completionRatio={stats.completionRatio}
-        onReset={reset}
+        onReset={handleReset}
         readOnly={readOnly}
         isHydrated={isHydrated}
       />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
 import { useUser } from "@/hooks/useUser";
@@ -15,6 +15,13 @@ export function UserAuthModal({ isOpen, onClose, defaultMode = "login" }: UserAu
   const [mode, setMode] = useState<"login" | "register">(defaultMode);
   const { login, register, error } = useUser();
 
+  // Update mode when defaultMode changes or modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setMode(defaultMode);
+    }
+  }, [isOpen, defaultMode]);
+
   if (!isOpen) return null;
 
   const handleLogin = async (identifier: string, password: string) => {
@@ -28,8 +35,8 @@ export function UserAuthModal({ isOpen, onClose, defaultMode = "login" }: UserAu
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="relative w-full max-w-md rounded-3xl bg-white p-8 shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+      <div className="relative w-full max-w-lg rounded-3xl bg-white p-8 shadow-2xl">
         <button
           type="button"
           onClick={onClose}

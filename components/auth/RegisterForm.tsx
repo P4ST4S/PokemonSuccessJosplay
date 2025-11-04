@@ -62,7 +62,7 @@ export function RegisterForm({ onSubmit, onSwitchToLogin, error }: RegisterFormP
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="josplay"
+          placeholder="Nom d'utilisateur"
           required
           minLength={3}
           className="rounded-2xl border-2 border-mii-silver bg-white px-4 py-3 text-base text-mii-ink placeholder-mii-slate/50 transition-all duration-200 focus:border-mii-sky-400 focus:outline-none focus:ring-4 focus:ring-mii-sky-400/20"
