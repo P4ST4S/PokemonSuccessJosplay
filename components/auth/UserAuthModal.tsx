@@ -14,7 +14,7 @@ interface UserAuthModalProps {
 export function UserAuthModal({ isOpen, onClose, defaultMode = "login" }: UserAuthModalProps) {
   const [mode, setMode] = useState<"login" | "register">(defaultMode);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { login, register, error } = useUser();
+  const { login, register, error, refreshUser } = useUser();
 
   // Update mode when defaultMode changes or modal opens
   useEffect(() => {
@@ -30,8 +30,10 @@ export function UserAuthModal({ isOpen, onClose, defaultMode = "login" }: UserAu
     setIsSubmitting(true);
     try {
       await login(identifier, password);
-      // Give time for the user state to propagate
-      await new Promise(resolve => setTimeout(resolve, 100));
+      // Force refresh to ensure all components get updated user state
+      await refreshUser();
+      // Small delay to ensure state propagates to all components
+      await new Promise(resolve => setTimeout(resolve, 300));
       onClose();
     } catch (err) {
       setIsSubmitting(false);
@@ -42,8 +44,10 @@ export function UserAuthModal({ isOpen, onClose, defaultMode = "login" }: UserAu
     setIsSubmitting(true);
     try {
       await register(username, password, email);
-      // Give time for the user state to propagate
-      await new Promise(resolve => setTimeout(resolve, 100));
+      // Force refresh to ensure all components get updated user state
+      await refreshUser();
+      // Small delay to ensure state propagates to all components
+      await new Promise(resolve => setTimeout(resolve, 300));
       onClose();
     } catch (err) {
       setIsSubmitting(false);
