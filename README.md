@@ -10,8 +10,6 @@
 </p>
 <p align="center"><a href="https://succes-dex.com">succes-dex.com</a></p>
 
-![Preview](./public/icon.jpg)
-
 ## Introduction 🎯
 Succès Dex est le compagnon moderne qui transforme les succès de Josplay pour Pokémon HeartGold & SoulSilver en une expérience interactive, accessible et partageable. Built for developers who care about simplicity, performance, and clarity.
 
