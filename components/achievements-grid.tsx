@@ -8,6 +8,7 @@ import { CategoryDivider } from "@/components/achievements/CategoryDivider";
 import { StatusDivider } from "@/components/achievements/StatusDivider";
 import { EmptyState } from "@/components/achievements/EmptyState";
 import { useUser } from "@/hooks/useUser";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useAchievementStats } from "@/hooks/useAchievementStats";
 import { useAchievementFilters } from "@/hooks/useAchievementFilters";
 import type { Achievement } from "@/types/achievement";
@@ -29,6 +30,14 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
   const { user, isLoading: isUserLoading, refreshUser } = useUser();
   const [isToggling, setIsToggling] = useState<string | null>(null);
 
+  // LocalStorage fallback for non-authenticated users
+  const {
+    value: localCompletedIds,
+    setValue: setLocalCompletedIds,
+    reset: resetLocalStorage,
+    isHydrated: isLocalHydrated,
+  } = useLocalStorage<string[]>(STORAGE_KEY, []);
+
   // Sync readOnly completed IDs
   useEffect(() => {
     if (readOnly) {
@@ -36,9 +45,15 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
     }
   }, [readOnly, JSON.stringify(initialCompletedIds)]);
 
-  const completedIds = readOnly ? readOnlyCompletedIds : (user?.completedIds || []);
+  // Determine which completed IDs to use
+  const completedIds = readOnly
+    ? readOnlyCompletedIds
+    : user
+      ? user.completedIds
+      : localCompletedIds;
+
   const completedSet = new Set(completedIds);
-  const isHydrated = !isUserLoading;
+  const isHydrated = readOnly ? true : (user ? !isUserLoading : isLocalHydrated);
 
   const stats = useAchievementStats({
     completedSet,
@@ -53,37 +68,54 @@ export const AchievementsGrid: React.FC<AchievementsGridProps> = ({
 
   const handleToggle = useCallback(
     async (id: Achievement["id"]) => {
-      if (!user || isToggling) return;
+      if (readOnly || isToggling) return;
 
       setIsToggling(id);
+
       try {
-        const response = await fetch("/api/achievements/toggle", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ achievementId: id }),
-        });
+        if (user) {
+          // User is authenticated - save to DB
+          const response = await fetch("/api/achievements/toggle", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ achievementId: id }),
+          });
 
-        if (!response.ok) {
-          throw new Error("Failed to toggle achievement");
+          if (!response.ok) {
+            throw new Error("Failed to toggle achievement");
+          }
+
+          // Refresh user to get updated completedIds
+          await refreshUser();
+        } else {
+          // User is NOT authenticated - save to localStorage only
+          setLocalCompletedIds((previous) => {
+            if (previous.includes(id)) {
+              return previous.filter((entry) => entry !== id);
+            }
+            return [...previous, id];
+          });
         }
-
-        // Refresh user to get updated completedIds
-        await refreshUser();
       } catch (error) {
         console.error("Error toggling achievement:", error);
       } finally {
         setIsToggling(null);
       }
     },
-    [user, isToggling, refreshUser]
+    [user, isToggling, refreshUser, setLocalCompletedIds, readOnly]
   );
 
   const handleReset = useCallback(async () => {
-    if (!user || readOnly) return;
+    if (readOnly) return;
 
-    // Not implemented yet - would need a bulk delete API endpoint
-    console.log("Reset not yet implemented for DB mode");
-  }, [user, readOnly]);
+    if (user) {
+      // Not implemented yet - would need a bulk delete API endpoint
+      console.log("Reset not yet implemented for DB mode");
+    } else {
+      // Reset localStorage
+      resetLocalStorage();
+    }
+  }, [user, readOnly, resetLocalStorage]);
 
   const getCategoryStats = (category: Achievement["category"]) => {
     const categoryAchievements = achievements.filter(
