@@ -13,7 +13,7 @@ interface UserAuthModalProps {
 
 export function UserAuthModal({ isOpen, onClose, defaultMode = "login" }: UserAuthModalProps) {
   const [mode, setMode] = useState<"login" | "register">(defaultMode);
-  const { login, register, error } = useUser();
+  const { login, register, error, user } = useUser();
 
   // Update mode when defaultMode changes or modal opens
   useEffect(() => {
@@ -22,16 +22,23 @@ export function UserAuthModal({ isOpen, onClose, defaultMode = "login" }: UserAu
     }
   }, [isOpen, defaultMode]);
 
+  // Close modal when user is successfully authenticated
+  useEffect(() => {
+    if (user && isOpen) {
+      onClose();
+    }
+  }, [user, isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleLogin = async (identifier: string, password: string) => {
     await login(identifier, password);
-    onClose();
+    // Modal will close automatically via useEffect when user is set
   };
 
   const handleRegister = async (username: string, password: string, email?: string) => {
     await register(username, password, email);
-    onClose();
+    // Modal will close automatically via useEffect when user is set
   };
 
   return (
