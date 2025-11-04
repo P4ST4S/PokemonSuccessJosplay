@@ -7,6 +7,7 @@ const STORAGE_KEY = "mii-achievements::completed";
 
 export const SyncButton: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [actionType, setActionType] = useState<"fetch" | "sync">("sync");
   const [username, setUsername] = useState("josplay");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -34,6 +35,66 @@ export const SyncButton: React.FC = () => {
       }
     }
   }, []);
+
+  const handleFetch = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    setLoading(true);
+    setMessage(null);
+
+    try {
+      // Récupérer la progression depuis le serveur sans syncer
+      const progressResponse = await fetch(`/api/progress/${username}`, {
+        cache: "no-store",
+      });
+
+      if (!progressResponse.ok) {
+        throw new Error("Erreur lors de la récupération de la progression");
+      }
+
+      const progressData = await progressResponse.json();
+
+      // Sauvegarder les credentials en cas de succès
+      localStorage.setItem(
+        AUTH_STORAGE_KEY,
+        JSON.stringify({ username, password })
+      );
+      setIsAuthenticated(true);
+
+      // Mettre à jour le localStorage avec les données du serveur
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(progressData.completedIds)
+      );
+
+      // Déclencher un événement pour que les autres composants se mettent à jour
+      window.dispatchEvent(new Event("storage"));
+
+      setMessage({
+        type: "success",
+        text: `Récupéré ! ${progressData.completedIds.length} succès validés`,
+      });
+
+      // Afficher le toast de succès
+      setToastMessage(`Récupéré ! ${progressData.completedIds.length} succès`);
+      setShowToast(true);
+
+      setTimeout(() => {
+        setIsOpen(false);
+        setTimeout(() => setShowToast(false), 3000);
+      }, 2000);
+    } catch (error) {
+      // En cas d'erreur, supprimer les credentials stockés
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+      setIsAuthenticated(false);
+      setMessage({
+        type: "error",
+        text:
+          error instanceof Error ? error.message : "Erreur de récupération",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSync = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -112,8 +173,19 @@ export const SyncButton: React.FC = () => {
     }
   };
 
+  // Fetch automatique si déjà authentifié
+  const handleQuickFetch = () => {
+    setActionType("fetch");
+    if (isAuthenticated) {
+      handleFetch();
+    } else {
+      setIsOpen(true);
+    }
+  };
+
   // Sync automatique si déjà authentifié
   const handleQuickSync = () => {
+    setActionType("sync");
     if (isAuthenticated) {
       handleSync();
     } else {
@@ -134,56 +206,106 @@ export const SyncButton: React.FC = () => {
 
   return (
     <>
-      <button
-        type="button"
-        onClick={handleQuickSync}
-        disabled={loading}
-        className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-5 py-2.5 text-sm font-bold text-white shadow-xl transition-all duration-200 hover:from-purple-600 hover:to-pink-600 hover:scale-105 hover:shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-300 disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        {loading ? (
-          <svg
-            className="size-4 animate-spin"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+        <button
+          type="button"
+          onClick={handleQuickFetch}
+          disabled={loading}
+          className="inline-flex min-w-60 items-center justify-center gap-2 rounded-full bg-linear-to-r from-blue-500 to-cyan-500 px-4 py-2 text-sm font-semibold text-white shadow-lg transition-all duration-200 hover:from-blue-600 hover:to-cyan-600 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {loading ? (
+            <svg
+              className="size-4 animate-spin shrink-0"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
               stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            />
-          </svg>
-        ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="size-4"
-          >
-            <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
-          </svg>
-        )}
-        {loading ? "Synchronisation..." : "Synchroniser ma progression"}
-      </button>
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="size-4 shrink-0"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+          )}
+          <span className="whitespace-nowrap">{loading ? "Récupération..." : "Récupérer"}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={handleQuickSync}
+          disabled={loading}
+          className="inline-flex min-w-60 items-center justify-center gap-2 rounded-full bg-linear-to-r from-purple-500 to-pink-500 px-4 py-2 text-sm font-semibold text-white shadow-lg transition-all duration-200 hover:from-purple-600 hover:to-pink-600 hover:scale-105 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-300 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {loading ? (
+            <svg
+              className="size-4 animate-spin shrink-0"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="size-4 shrink-0"
+            >
+              <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
+            </svg>
+          )}
+          <span className="whitespace-nowrap">{loading ? "Synchronisation..." : "Synchroniser"}</span>
+        </button>
+      </div>
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-xl font-bold text-mii-ink">
-                Synchroniser avec le serveur
+                {actionType === "fetch"
+                  ? "Récupérer depuis le serveur"
+                  : "Synchroniser avec le serveur"}
               </h2>
               <button
                 onClick={() => setIsOpen(false)}
@@ -206,12 +328,12 @@ export const SyncButton: React.FC = () => {
             </div>
 
             <p className="mb-4 text-sm text-mii-slate">
-              Synchronise ta progression locale ({getCompletedCount()} succès
-              validés) avec le serveur pour que tout le monde puisse voir ton
-              avancement.
+              {actionType === "fetch"
+                ? "Récupère la progression depuis le serveur pour mettre à jour tes succès locaux avec ceux déjà validés par ton équipe."
+                : `Synchronise ta progression locale (${getCompletedCount()} succès validés) avec le serveur pour que tout le monde puisse voir ton avancement.`}
             </p>
 
-            <form onSubmit={handleSync} className="flex flex-col gap-4">
+            <form onSubmit={actionType === "fetch" ? handleFetch : handleSync} className="flex flex-col gap-4">
               <div>
                 <label
                   htmlFor="username"
@@ -269,9 +391,19 @@ export const SyncButton: React.FC = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2.5 font-bold text-white shadow-lg transition-all hover:from-purple-600 hover:to-pink-600 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+                  className={`flex-1 rounded-xl bg-gradient-to-r px-4 py-2.5 font-bold text-white shadow-lg transition-all hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50 ${
+                    actionType === "fetch"
+                      ? "from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600"
+                      : "from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
+                  }`}
                 >
-                  {loading ? "Synchronisation..." : "Synchroniser"}
+                  {loading
+                    ? actionType === "fetch"
+                      ? "Récupération..."
+                      : "Synchronisation..."
+                    : actionType === "fetch"
+                    ? "Récupérer"
+                    : "Synchroniser"}
                 </button>
               </div>
             </form>
