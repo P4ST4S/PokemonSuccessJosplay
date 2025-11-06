@@ -64,7 +64,6 @@
   { "id": "jouet-retrouve", "title": "Jouet retrouvé", "description": "Retrouver la poupée de la petite fille", "icon": "/icons/default.svg", "category": "Quêtes" },
   { "id": "le-cerveau-en-ruines", "title": "Le cerveau en ruines", "description": "Finir le puzzle zone Zarbi", "icon": "/icons/default.svg", "category": "Quêtes" },
   { "id": "sans-tricher", "title": "Sans tricher !", "description": "Réussir le quizz de la tour radio", "icon": "/icons/default.svg", "category": "Divers" },
-  { "id": "queue-succulente", "title": "Queue succulente", "description": "Acheter une queue de Ramoloss", "icon": "/icons/default.svg", "category": "Collection" },
   { "id": "heros-contre-heros", "title": "Héros contre Héros", "description": "Battre Red", "icon": "/icons/default.svg", "category": "Intrigue" },
   { "id": "adieu", "title": "Adieu", "description": "Relâcher un Pokémon niveau 100", "icon": "/icons/default.svg", "category": "Pokémon" },
   { "id": "rivalite-eternelle", "title": "Rivalité éternelle", "description": "Rebattre le rival après la première ligue", "icon": "/icons/default.svg", "category": "Intrigue" },
