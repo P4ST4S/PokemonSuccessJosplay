@@ -81,7 +81,7 @@
   { "id": "trio-legendnaire", "title": "Trio légendaire", "description": "Libérer les chiens légendaires", "icon": "/icons/default.svg", "category": "Intrigue" },
   { "id": "alphabet-vivant", "title": "Alphabet vivant", "description": "Capturer les 28 Zarbi", "icon": "/icons/default.svg", "category": "Pokémon" },
   { "id": "dresseur-delite", "title": "Dresseur d’élite", "description": "Avoir les 16 Badges en Set mode", "icon": "/icons/default.svg", "category": "Intrigue" },
-  { "id": "arsenal-complet", "title": "Arsenal complet", "description": "Obtenir toutes les CT et CS", "icon": "/icons/default.svg", "category": "Collection" },
+  { "id": "arsenal-complet", "title": "Arsenal complet", "description": "Obtenir toutes les CS", "icon": "/icons/default.svg", "category": "Collection" },
   { "id": "falkner", "title": "Champion : Albert", "description": "Vaincre Albert, champion de Mauville, spécialiste des Pokémon Vol.", "icon": "/icons/default.svg", "category": "Intrigue" },
   { "id": "bugsy", "title": "Champion : Hector", "description": "Vaincre Hector, champion d'Écorcia, spécialiste des Pokémon Insecte.", "icon": "/icons/default.svg", "category": "Intrigue" },
   { "id": "whitney", "title": "Championne : Blanche", "description": "Vaincre Blanche, championne de Doublonville, spécialiste des Pokémon Normal.", "icon": "/icons/default.svg", "category": "Intrigue" },
