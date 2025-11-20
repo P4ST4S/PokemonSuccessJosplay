@@ -1,9 +1,7 @@
 [
   { "id": "agent-double", "title": "Agent double", "description": "Obtenir et enfiler la tenue Rocket", "icon": "/icons/default.svg", "category": "Quêtes" },
   { "id": "athlete-supreme", "title": "Athlète suprême", "description": "TOP 1 sur les mini jeux du pokéathlons", "icon": "/icons/default.svg", "category": "Divers" },
-  { "id": "attrapeur-en-serie-1", "title": "Attrapeur en série I", "description": "Capturer 50 Pokémons", "icon": "/icons/default.svg", "category": "Pokémon" },
   { "id": "attrapeur-en-serie-2", "title": "Attrapeur en série II", "description": "Capturer 100 Pokémons", "icon": "/icons/default.svg", "category": "Pokémon" },
-  { "id": "attrapeur-en-serie-3", "title": "Attrapeur en série III", "description": "Capturer 200 Pokémons", "icon": "/icons/default.svg", "category": "Pokémon" },
   { "id": "collectionneur-de-badges", "title": "Collectionneur de badges", "description": "Avoir les 16 Badges", "icon": "/icons/default.svg", "category": "Intrigue" },
   { "id": "tour-de-combat", "title": "Tour de Combat", "description": "Battre au moins un boss d’une des tours de combat", "icon": "/icons/default.svg", "category": "Intrigue" },
   { "id": "cache-cache-marin", "title": "Cache-cache marin", "description": "Jouer à cache-cache avec la petite sur le bateau", "icon": "/icons/default.svg", "category": "Divers" },
@@ -47,7 +45,6 @@
   { "id": "parent-adoptif", "title": "Parent adoptif", "description": "Obtenir une petite évolution à la pension", "icon": "/icons/default.svg", "category": "Pokémon" },
   { "id": "donne-moi-ton-lait", "title": "Donne moi ton lait", "description": "Soigner Écrémeuh", "icon": "/icons/default.svg", "category": "Quêtes" },
   { "id": "mini-mais-rapide", "title": "Mini mais rapide", "description": "Obtenir le Minidraco avec vitesse extrême", "icon": "/icons/default.svg", "category": "Pokémon" },
-  { "id": "fashion-week", "title": "Fashion Week", "description": "Gagner un concours de beauté", "icon": "/icons/default.svg", "category": "Divers" },
   { "id": "voyage-en-mer", "title": "Voyage en mer", "description": "Prendre l’Océane", "icon": "/icons/default.svg", "category": "Divers" },
   { "id": "chanceux", "title": "Chanceux", "description": "Obtenir l’œuf chance sur un Leveinard", "icon": "/icons/default.svg", "category": "Quêtes" },
   { "id": "nouveau-ne", "title": "Nouveau né", "description": "Faire éclore un œuf", "icon": "/icons/default.svg", "category": "Pokémon" },
@@ -110,5 +107,9 @@
   { "id": "seigneur-des-abysses", "title": "Seigneur des abysses", "description": "Capturer Lugia", "icon": "/icons/default.svg", "category": "Pokémon" },
   { "id": "relique-3g", "title": "Relique 3G", "description": "Capturer un Pokémon légendaire de la 3e génération", "icon": "/icons/default.svg", "category": "Pokémon" },
   { "id": "pecheur-pro", "title": "Pêcheur Pro", "description": "Obtenir toutes les cannes à pêche", "icon": "/icons/default.svg", "category": "Collection" },
-  { "id": "âme-rouge", "title": "Âme Rouge", "description": "Capturer Latias", "icon": "/icons/default.svg", "category": "Pokémon" }
+  { "id": "âme-rouge", "title": "Âme Rouge", "description": "Capturer Latias", "icon": "/icons/default.svg", "category": "Pokémon" },
+  { "id": "carnet-dresseur", "title": "Carnet de Dresseur", "description": "Obtenir tous les numéros de téléphone des champions de Johto et Kanto", "icon": "/icons/default.svg", "category": "Intrigue" },
+  { "id": "styliste-de-ball", "title": "Styliste de Ball", "description": "Personnaliser une Pokéball", "icon": "/icons/default.svg", "category": "Collection" },
+  { "id": "le-clone-parfait", "title": "Le Clone Parfait", "description": "Capturer Mewtwo", "icon": "/icons/default.svg", "category": "Pokémon" },
+  { "id": "shiny-inattendu", "title": "Shiny inattendu", "description": "Rencontrer un shiny totalement au hasard, en sauvage", "icon": "/icons/default.svg", "category": "Pokémon" }
 ]
